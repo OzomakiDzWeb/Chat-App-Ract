@@ -8,7 +8,7 @@ import ItmChat from "./itmChat";
 const List = () => {
   return (
     <div
-      className="flex-1 flex flex-col p-2 overflow-y-scroll  [&::-webkit-scrollbar]:w-1  [&::-webkit-scrollbar-track]:bg-gray-100
+      className=" flex flex-col p-4 overflow-y-scroll  [&::-webkit-scrollbar]:w-[2px]  [&::-webkit-scrollbar-track]:bg-gray-100
   [&::-webkit-scrollbar-thumb]:bg-[rgba(17,25,40)]   border-r border-white/50 "
     >
       {/* heder */}
@@ -20,13 +20,13 @@ const List = () => {
           <p className="text-xl font-semibold">John Smith</p>
         </div>
         <div className="flex gap-4">
-          <IoIosMore size={30} />
-          <IoVideocam size={30} />
-          <MdOutlineCreate size={30} />
+          <IoIosMore size={20} />
+          <IoVideocam size={20} />
+          <MdOutlineCreate size={20} />
         </div>
       </div>
       {/* searchBar */}
-      <div className=" mt-5 flex items-center justify-between">
+      <div className=" mt-5 flex items-center gap-2 justify-between">
         <div className="flex items-center gap-1 bg-[rgba(17,25,40,0.75)] rounded-sm py-1 px-2">
           <IoMdSearch size={20} />
           <input
@@ -40,12 +40,10 @@ const List = () => {
         </div>
       </div>
       {/* itm chat */}
-      <div className="mt-5  ">
+      <div className="mt-5  divide-y divide-slate-700">
         <ItmChat />
 
-        <ItmChat />
-        <ItmChat />
-        <ItmChat />
+      
         <ItmChat />
         <ItmChat />
       </div>
