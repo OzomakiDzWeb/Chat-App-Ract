@@ -67,6 +67,7 @@ const Details = () => {
         </div>
       </div>
       <button className='px-2 py-1 bg-red-300 rounded-md cursor-pointer'>block user</button>
+      <button className='px-2 py-1 bg-red-300 rounded-md cursor-pointer'>log out </button>
     </div>
   );
 }
