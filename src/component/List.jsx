@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import { IoVideocam } from "react-icons/io5";
 import { MdOutlineCreate } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 import ItmChat from "./itmChat";
+import AddUser from "./addUser";
 const List = () => {
+  const [isOpen,setOpen]=useState(false)
   return (
     <div
       className=" flex flex-col p-4 overflow-y-scroll  [&::-webkit-scrollbar]:w-[2px]  [&::-webkit-scrollbar-track]:bg-gray-100
@@ -36,17 +39,19 @@ const List = () => {
           />
         </div>
         <div className="bg-[rgba(17,25,40,0.75)] h-8 w-8 flex items-center justify-center ">
-          <FaPlus size={20} />
+          <div className="cursor-pointer " onClick={() => setOpen(!isOpen)}>
+            {isOpen ?  <FaPlus size={20}/>: <FaMinus size={20} /> }
+          </div>
         </div>
       </div>
       {/* itm chat */}
       <div className="mt-5  divide-y divide-slate-700">
         <ItmChat />
 
-      
         <ItmChat />
         <ItmChat />
       </div>
+    <AddUser isOpen={isOpen} setOpen={setOpen} />
     </div>
   );
 };
