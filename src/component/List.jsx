@@ -47,8 +47,7 @@ const List = () => {
       {/* itm chat */}
       <div className="mt-5  divide-y divide-slate-700">
         <ItmChat />
-
-        <ItmChat />
+         <ItmChat />
         <ItmChat />
       </div>
     <AddUser isOpen={isOpen} setOpen={setOpen} />

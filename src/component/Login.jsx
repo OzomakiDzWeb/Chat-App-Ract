@@ -1,23 +1,43 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { auth } from "../fairBase/fairbas";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../fairBase/fairbas";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import upload from "../fairBase/upload";
 const Login = () => {
   const [avatar,setAvatar]=useState({
     file:null,
     url:''
   })
+  const [loding,setLoding]=useState(false)
   // handel rigster
   const handleRegister=async(e)=>{
     e.preventDefault()
+    setLoding(true)
     const formaData=new FormData(e.target)
     const {username,email,password}=Object.fromEntries(formaData)
     try{
+      // creat user
       const res= await createUserWithEmailAndPassword(auth,email,password)
+      // img url
+      const imgUrl=await upload(avatar.file)
+      // register user in database
+      await setDoc(doc(db,'users',res.user.uid),{
+         username,
+         email,
+         avatar:imgUrl,
+         id:res.user.uid,
+         blocked:[]
+      })
+      // register user in list chat
+     await setDoc(doc(db,'userchats',res.user.uid),{
+      chats:[]
+     })
+      toast.success('Account created,you can login now')
     }catch(err){
       console.log(err)
       toast.error(err.message)
-    }
+    }finally{setLoding(false)}
   }
   // handel input img
   const handelAvater=(e)=>{
@@ -30,13 +50,22 @@ const Login = () => {
     }
   }
   // handel Login
-     const handelLogin=(e)=>{
+     const handelLogin=async(e)=>{
           e.preventDefault()
-          toast.success('dddddddd')
+          setLoding(true)
+          const formaData=new FormData(e.target)
+          const {email,password}=Object.fromEntries(formaData)
+          try{
+             await signInWithEmailAndPassword(auth,email,password) 
+             toast.success('hay ')
+          }catch(err){
+            console.log(err) 
+            toast.error(err.message)
+          }finally{
+            setLoding(false)
+          }
      }
-     const handelRigster=()=>{
-
-     }
+    
   return (
     <div className="grid grid-cols-2 w-full ">
       {/* left */}
@@ -68,7 +97,7 @@ const Login = () => {
             <label className="flex items-center justify-between" htmlFor="file">
               <img
                 className="w-10 h-10"
-                src="../../public/avatar.png"
+                src={avatar.url || '../../public/avatar.png'}
                 alt="img"
               />
               uplod Image
@@ -99,8 +128,8 @@ const Login = () => {
               placeholder="password"
               name="password"
             />
-            <button className="block" type="submit">
-              sgin up
+            <button disabled={loding} className={`${loding?'bg-blue-400':'bg-blue-700'} block px-2 py-1 rounded mt-3 mx-auto`} type="submit">
+              {loding?'loding':'sgin up'}
             </button>
           </form>
         </div>
