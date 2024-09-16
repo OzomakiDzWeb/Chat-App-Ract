@@ -4,7 +4,9 @@ import { auth, db } from "../fairBase/fairbas";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../fairBase/upload";
+import { useUserStore } from "../Store/userStore";
 const Login = () => {
+    const { currentUser, isLoading, fetchUserInfo } = useUserStore();
   const [avatar,setAvatar]=useState({
     file:null,
     url:''
@@ -34,6 +36,7 @@ const Login = () => {
       chats:[]
      })
       toast.success('Account created,you can login now')
+      fetchUserInfo(res.user.uid)
     }catch(err){
       console.log(err)
       toast.error(err.message)
@@ -55,9 +58,12 @@ const Login = () => {
           setLoding(true)
           const formaData=new FormData(e.target)
           const {email,password}=Object.fromEntries(formaData)
+          console.log(email, password);
           try{
              await signInWithEmailAndPassword(auth,email,password) 
              toast.success('hay ')
+             fetchUserInfo()
+             console.log(currentUser);
           }catch(err){
             console.log(err) 
             toast.error(err.message)
@@ -77,14 +83,16 @@ const Login = () => {
               className="px-1 py-2 rounded-md focus:outline-none bg-[rgba(17,25,40,0.75)] "
               type="email"
               placeholder="email"
+              name="email"
             />
             <input
               className="px-1 py-2 rounded-md focus:outline-none bg-[rgba(17,25,40,0.75)] "
               type="password"
               placeholder="password"
+              name="password"
             />
             <button type="submit" className="bg-blue-300 rounded-md px-1 py-2">
-              login
+              log in
             </button>
           </form>
         </div>
@@ -97,7 +105,7 @@ const Login = () => {
             <label className="flex items-center justify-between" htmlFor="file">
               <img
                 className="w-10 h-10"
-                src={avatar.url || '../../public/avatar.png'}
+                src={avatar.url || "../../public/avatar.png"}
                 alt="img"
               />
               uplod Image
@@ -128,8 +136,14 @@ const Login = () => {
               placeholder="password"
               name="password"
             />
-            <button disabled={loding} className={`${loding?'bg-blue-400':'bg-blue-700'} block px-2 py-1 rounded mt-3 mx-auto`} type="submit">
-              {loding?'loding':'sgin up'}
+            <button
+              disabled={loding}
+              className={`${
+                loding ? "bg-blue-400" : "bg-blue-700"
+              } block px-2 py-1 rounded mt-3 mx-auto`}
+              type="submit"
+            >
+              {loding ? "loding" : "sgin up"}
             </button>
           </form>
         </div>

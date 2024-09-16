@@ -7,8 +7,10 @@ import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import ItmChat from "./itmChat";
 import AddUser from "./addUser";
+import { useUserStore } from "../Store/userStore";
 const List = () => {
   const [isOpen,setOpen]=useState(false)
+    const { currentUser, isLoading, fetchUserInfo } = useUserStore();
   return (
     <div
       className=" flex flex-col p-4 overflow-y-scroll  [&::-webkit-scrollbar]:w-[2px]  [&::-webkit-scrollbar-track]:bg-gray-100
@@ -17,10 +19,10 @@ const List = () => {
       {/* heder */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full overflow-hidden">
-            <img src="/public/avatar.png" alt="avter" />
+          <div className="w-10 h-10 flex justify-center items-center rounded-full overflow-hidden">
+            <img src={`${"../../public/avatar.png"}`} alt="avter" />
           </div>
-          <p className="text-xl font-semibold">John Smith</p>
+          <p className="text-xl font-semibold">{currentUser.username}</p>
         </div>
         <div className="flex gap-4">
           <IoIosMore size={20} />
@@ -40,17 +42,17 @@ const List = () => {
         </div>
         <div className="bg-[rgba(17,25,40,0.75)] h-8 w-8 flex items-center justify-center ">
           <div className="cursor-pointer " onClick={() => setOpen(!isOpen)}>
-            {isOpen ?  <FaPlus size={20}/>: <FaMinus size={20} /> }
+            {isOpen ? <FaPlus size={20} /> : <FaMinus size={20} />}
           </div>
         </div>
       </div>
       {/* itm chat */}
       <div className="mt-5  divide-y divide-slate-700">
         <ItmChat />
-         <ItmChat />
+        <ItmChat />
         <ItmChat />
       </div>
-    <AddUser isOpen={isOpen} setOpen={setOpen} />
+      <AddUser isOpen={isOpen} setOpen={setOpen} />
     </div>
   );
 };

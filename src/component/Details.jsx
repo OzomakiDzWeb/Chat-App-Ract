@@ -2,6 +2,7 @@ import React from 'react'
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaLongArrowAltDown } from "react-icons/fa";
+import { auth } from '../fairBase/fairbas';
 const Details = () => {
   return (
     <div className="flex flex-col p-4 border-l">
@@ -67,7 +68,7 @@ const Details = () => {
         </div>
       </div>
       <button className='px-2 py-1 bg-red-300 rounded-md cursor-pointer'>block user</button>
-      <button className='px-2 py-1 bg-red-300 rounded-md cursor-pointer'>log out </button>
+      <button onClick={()=>auth.signOut()} className='px-2 py-1 bg-red-300 rounded-md cursor-pointer'>log out </button>
     </div>
   );
 }
