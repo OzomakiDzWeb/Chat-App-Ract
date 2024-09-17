@@ -1,16 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import { IoVideocam } from "react-icons/io5";
 import { MdOutlineCreate } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
-import ItmChat from "./itmChat";
+
 import AddUser from "./addUser";
 import { useUserStore } from "../Store/userStore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { db } from "../fairBase/fairbas";
+
 const List = () => {
   const [isOpen,setOpen]=useState(false)
-    const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+  const [chats,setchats]=useState([]);
+  const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "userchats", currentUser.id), async (res) => {
+      console.log(res.data());
+      const itmes=res.data().chats;
+      const promises=itmes.map(async(itm)=>{
+        const userDocRef=doc(db,'users',itm.receiverId);
+        const userDocSnap=await getDoc(userDocRef)
+        const user=userDocSnap.data()
+        return {...itm,user}
+      })
+      const chatData=await Promise.all(promises)
+      setchats(chatData.sort((a,b)=>b.updatedAt-a.updatedAt))
+      
+    });
+    return () =>{ unsub()};
+  }, [currentUser.id]);
+    console.log(`${chats}+ kkkkkkkkkkkkkkk`);
   return (
     <div
       className=" flex flex-col p-4 overflow-y-scroll  [&::-webkit-scrollbar]:w-[2px]  [&::-webkit-scrollbar-track]:bg-gray-100
@@ -48,9 +69,15 @@ const List = () => {
       </div>
       {/* itm chat */}
       <div className="mt-5  divide-y divide-slate-700">
-        <ItmChat />
-        <ItmChat />
-        <ItmChat />
+        {chats.map((itm) => (
+          <div key={itm.chatId} className="flex gap-3 items-center  py-3">
+            <div className="h-10 w-10 rounded-full flex justify-center items-center bg-black"></div>
+            <div>
+              <p className="text-xl font-normal">ddcdcdc</p>
+              <span className="text-xs">dddddd</span>
+            </div>
+          </div>
+        ))}
       </div>
       <AddUser isOpen={isOpen} setOpen={setOpen} />
     </div>

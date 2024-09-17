@@ -19,7 +19,7 @@ const App = () => {
       unSub();
     };
   }, [fetchUserInfo]);
-  console.log(currentUser)
+ 
   if(isLoading) return <div>loding...</div>
   return (
     <div className="w-[90vw] h-[90vh] bg-[rgba(17,25,40,0.75)] backdrop-blur-lg flex mt-7 rounded-md overflow-y-hidden ">
